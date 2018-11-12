@@ -26,14 +26,20 @@ public class CollectionUtilities {
   }
 
   public static <T> T head(List<T> list) {
-    throw new RuntimeException("To be implemented");
+    if(list.size() == 0)
+      throw new IllegalStateException("Head for empty list");
+    return list.get(0);
   }
 
   private static <T> List<T > copy(List<T> ts) {
-    throw new RuntimeException("To be implemented");
+    return new ArrayList<>(ts);
   }
 
   public static <T> List<T> tail(List<T> list) {
-    throw new RuntimeException("To be implemented");
+    if(list.size() == 0)
+      throw new IllegalStateException("Head for empty list");
+    List<T> copy = copy(list);
+    copy.remove(0);
+    return Collections.unmodifiableList(copy);
   }
 }
