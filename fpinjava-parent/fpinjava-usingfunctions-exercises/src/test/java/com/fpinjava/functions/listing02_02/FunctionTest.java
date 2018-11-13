@@ -6,7 +6,8 @@ import static org.junit.Assert.*;
 
 public class FunctionTest {
     private Function<Integer, Double> addTwo = a -> a + 2.0;
-    private Function<Double, Double> multiplyByTwo = a -> a * 2;
+
+    private Function<Double, Long> multiplyByTwo = a -> (long) (a * 2);
 
     @Test
     public void apply() {
@@ -15,12 +16,12 @@ public class FunctionTest {
 
     @Test
     public void compose() {
-        assertEquals(14.0, multiplyByTwo.compose(addTwo).apply(5), 0.0);
+        assertEquals(Long.valueOf(14), multiplyByTwo.compose(addTwo).apply(5));
     }
 
     @Test
     public void andThen() {
-        assertEquals(14.0, addTwo.andThen(multiplyByTwo).apply(5), 0.0);
+        assertEquals(Long.valueOf(14), addTwo.andThen(multiplyByTwo).apply(5));
     }
 
     @Test
@@ -30,37 +31,39 @@ public class FunctionTest {
 
     @Test
     public void compose1() {
+        assertEquals(Long.valueOf(14), Function.compose(multiplyByTwo, addTwo).apply(5));
     }
 
     @Test
     public void andThen1() {
+        assertEquals(Long.valueOf(14), Function.andThen(addTwo, multiplyByTwo).apply(5));
     }
 
     @Test
     public void compose2() {
+        Function<Function<Integer, Double>, Function<Function<Double, Long>, Function<Integer, Long>>> s = Function
+                .compose();
+        assertEquals(Long.valueOf(14), s.apply(addTwo).apply(multiplyByTwo).apply(5));
     }
 
     @Test
     public void andThen2() {
+        Function<Function<Double, Long>, Function<Function<Integer, Double>, Function<Integer, Long>>> s = Function
+                .andThen();
+        assertEquals(Long.valueOf(14), s.apply(multiplyByTwo).apply(addTwo).apply(5));
     }
 
     @Test
     public void TestHigherCompose() {
-
-        Function<Double, Integer> f = a -> (int) (a * 3);
-        Function<Integer, Double> g = a -> a + 2.0;
-
-        assertEquals(Integer.valueOf(9), f.compose(g).apply(1));
-        assertEquals(Integer.valueOf(9), Function.<Integer, Double, Integer>higherCompose().apply(f).apply(g).apply(1));
+        assertEquals(Long.valueOf(14), multiplyByTwo.compose(addTwo).apply(5));
+        assertEquals(Long.valueOf(14),
+                Function.<Integer, Double, Long>higherCompose().apply(multiplyByTwo).apply(addTwo).apply(5));
     }
 
     @Test
     public void TestHigherAndThen() {
-
-        Function<Double, Integer> f = a -> (int) (a * 3);
-        Function<Integer, Double> g = a -> a + 2.0;
-
-        assertEquals(Integer.valueOf(9), g.andThen(f).apply(1));
-        assertEquals(Integer.valueOf(9), Function.<Integer, Double, Integer>higherAndThen().apply(g).apply(f).apply(1));
+        assertEquals(Long.valueOf(14), addTwo.andThen(multiplyByTwo).apply(5));
+        assertEquals(Long.valueOf(14),
+                Function.<Integer, Double, Long>higherAndThen().apply(addTwo).apply(multiplyByTwo).apply(5));
     }
 }
