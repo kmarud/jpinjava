@@ -49,7 +49,7 @@ public abstract class List<A> {
 
     @Override
     public List<A> drop(int n) {
-      throw new RuntimeException("To be implemented");
+      return this;
     }
   }
 
@@ -92,7 +92,15 @@ public abstract class List<A> {
 
     @Override
     public List<A> drop(int n) {
-      throw new RuntimeException("To be implemented");
+      return n <=0
+              ? this
+              : drop_(this, n).eval();
+    }
+
+    private TailCall<List<A>> drop_(List<A>list , int n){
+      return n <=0 || list.isEmpty()
+              ? ret(list)
+              : sus(() -> drop_(list.tail(), n-1));
     }
   }
 
