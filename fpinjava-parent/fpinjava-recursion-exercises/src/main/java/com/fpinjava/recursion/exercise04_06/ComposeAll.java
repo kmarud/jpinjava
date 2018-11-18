@@ -4,10 +4,11 @@ import java.util.List;
 
 import com.fpinjava.common.Function;
 
+import static com.fpinjava.common.CollectionUtilities.*;
 
 public class ComposeAll {
 
-  static <T> Function<T, T> composeAll(List<Function<T, T>> list) {
-    throw new RuntimeException("To be implemented.");
-  }
+    static <T> Function<T, T> composeAll(List<Function<T, T>> list) {
+        return foldRight(list, Function.identity(), x -> x::compose);
+    }
 }
