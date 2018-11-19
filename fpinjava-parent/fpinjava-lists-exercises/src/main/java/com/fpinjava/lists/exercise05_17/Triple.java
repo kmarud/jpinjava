@@ -5,6 +5,6 @@ import com.fpinjava.lists.exercise05_16.List;
 public class Triple {
 
   public static List<Integer> triple(List<Integer> list) {
-    throw new IllegalStateException("To be implemented");
+    return List.foldRight(list, List.list(), h -> t -> t.cons(h * 3));
   }
 }

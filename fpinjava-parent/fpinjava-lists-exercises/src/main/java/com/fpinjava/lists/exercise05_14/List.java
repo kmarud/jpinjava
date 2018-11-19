@@ -20,9 +20,14 @@ public abstract class List<A> {
   public abstract <B> B foldLeft(B identity, Function<B, Function<A, B>> f);
 
   public <B> B foldRight(B identity, Function<A, Function<B, B>> f) {
-    throw new IllegalStateException("To be implemented");
+    return foldRight_(identity, this.reverse(), f).eval();
   }
 
+  private <B> TailCall<B> foldRight_(B acc, List<A> ts, Function<A, Function<B, B>> f){
+    return ts.isEmpty()
+            ? ret(acc)
+            : sus(() -> foldRight_(f.apply(ts.head()).apply(acc), ts.tail(), f));
+  }
   public List<A> cons(A a) {
     return new Cons<>(a, this);
   }
